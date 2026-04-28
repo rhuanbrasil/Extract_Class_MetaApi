@@ -14,9 +14,6 @@ FacebookAdsApi.init(app_id, app_secret, access_token, ad_account_id)
 
 Account = AdAccount(ad_account_id)
 
-pd.set_option('display.max_colwidth', None)
-pd.set_option('display.max_rows', None)
-
 filtros_leads = [
     {
         'field' : 'campaign.name',
