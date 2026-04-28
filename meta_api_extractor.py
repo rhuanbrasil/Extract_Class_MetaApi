@@ -14,8 +14,7 @@ FacebookAdsApi.init(app_id, app_secret, access_token, ad_account_id)
 
 Account = AdAccount(ad_account_id)
 
-pd.set_option('display.max_colwidth', None)
-pd.set_option('display.max_rows', None)
+metricas_padrao = ['campaign_name', 'spend', 'impressions', 'clicks', 'ctr']
 
 filtros_leads = [
     {
@@ -34,13 +33,7 @@ params_leads = {
     'filtering' : filtros_leads,
     'level': 'campaign'
 }
-campos_leads = [
-    'campaign_name',
-    'spend',
-    'impressions',
-    'clicks',
-    'ctr',
-]
+
 filtros_traffic = [
     {
         'field' : 'campaign.name',
@@ -53,15 +46,9 @@ params_traffic = {
     'filtering' : filtros_traffic,
     'level': 'campaign' 
 }
-campos_traffic = [
-    'campaign_name',
-    'objective_results',
-    'spend',
-    'impressions',
-    'clicks',
-    'ctr',
-]
-campaign_results = Account.get_insights(fields=campos_leads, params=params_leads)
+campos_traffic = metricas_padrao + ['objective_results']
+
+campaign_results = Account.get_insights(fields=metricas_padrao, params=params_leads)
 traffic_results = Account.get_insights(fields=campos_traffic, params=params_traffic)
 
 df = pd.DataFrame([dict(i) for i in campaign_results])
@@ -72,3 +59,5 @@ visitas = [linha[0]['values'][0]['value'] for linha in df2['results']]
 df2['visitas'] = visitas
 df2 = df2[['campaign_name','spend','impressions','clicks','ctr','date_start', 'date_stop', 'visitas']]
 df = pd.concat([df, df2.iloc[[0]]], ignore_index=True)
+
+print(df.head(10))
